@@ -53,6 +53,21 @@ toolbox:
   name: ocsinit
   enableCephTools: true
 
+#Define the CephObjectStorage parameters
+objectStorage:
+  enable: true
+  dataPool:
+    replicas: 3
+  gateway:
+    instances: 2
+  resources:
+    requests:
+      cpu: "1"
+      memory: 4Gi
+    limits:
+      cpu: "2"
+      memory: 6Gi
+
 #Define the odf storageSystem parameters
 storageSystem:
   deploy: false
