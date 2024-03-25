@@ -1,3 +1,4 @@
+{{- if .Values.objectStorage.enable -}}
 apiVersion: ceph.rook.io/v1
 kind: CephObjectStore
 metadata:
@@ -10,10 +11,10 @@ spec:
       dataChunks: 0
     failureDomain: zone
     replicated:
-      size: 3
+      size: {{ .Values.objectStorage.dataPool.replicas | default 3 }}
   gateway:
     #allNodes: false
-    instances: 2
+    instances: {{ .Values.objectStorage.gateway.instances | default 1 }}
     placement:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -39,12 +40,12 @@ spec:
         value: "true"
     port: 80
     resources:
-      limits:
-        cpu: "2"
-        memory: 4Gi
       requests:
-        cpu: "1"
-        memory: 4Gi
+        cpu: {{ .Values.objectStorage.resources.requests.cpu | squote }}
+        memory: {{ .Values.objectStorage.resources.requests.memory | squote }}
+      limits:
+        cpu: {{ .Values.objectStorage.resources.limits.cpu | squote }}
+        memory: {{ .Values.objectStorage.resources.limits.memory | squote }}
   metadataPool:
     erasureCoded:
       codingChunks: 0
@@ -52,3 +53,4 @@ spec:
     failureDomain: zone
     replicated:
       size: 3
+{{- end -}}
