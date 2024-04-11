@@ -16,7 +16,7 @@ spec:
         - |
           {{- if .Values.storageSystem.inventory.useSpecificNodes }}
           {{- range .Values.storageSystem.inventory.nodes }}
-          oc label node {{ . }} -l node-role.kubernetes.io/worker= cluster.ocs.openshift.io/openshift-storage='' --overwrite
+          oc label node {{ . }} cluster.ocs.openshift.io/openshift-storage='' --overwrite
           {{- end }}
           {{- else }}
           oc label nodes -l node-role.kubernetes.io/worker= cluster.ocs.openshift.io/openshift-storage='' --overwrite
