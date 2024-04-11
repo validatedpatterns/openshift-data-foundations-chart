@@ -14,7 +14,13 @@ spec:
         - /bin/bash
         - -c
         - |
-          oc label nodes -l node-role.kubernetes.io/worker= cluster.ocs.openshift.io/openshift-storage='' --overwrite  
+          {{- if .Values.storageSystem.inventory.useSpecificNodes }}
+          {{- range .Values.storageSystem.inventory.nodes }}
+          oc label node {{ . }} -l node-role.kubernetes.io/worker= cluster.ocs.openshift.io/openshift-storage='' --overwrite
+          {{- end }}
+          {{- else }}
+          oc label nodes -l node-role.kubernetes.io/worker= cluster.ocs.openshift.io/openshift-storage='' --overwrite
+          {{- end }}
         name: label-storage-nodes
       dnsPolicy: ClusterFirst
       restartPolicy: Never

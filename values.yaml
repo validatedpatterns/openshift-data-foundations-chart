@@ -67,6 +67,13 @@ objectStorage:
 
 #Define the odf storageSystem parameters
 storageSystem:
+  inventory:
+    useSpecificNodes: true # true/false to label a specific set of nodes to be part of ODF
+    nodes: # At least specify three nodes
+      - nodeA
+      - nodeB
+      - nodeC
+
   deploy: false
   name: ocs-storagecluster-storagesystem
   namespace: openshift-storage
