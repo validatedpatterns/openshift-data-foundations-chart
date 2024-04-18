@@ -1,6 +1,4 @@
 global:
-  xraylab:
-    namespace: "mlops"
   datacenter:
     storageClassName: gp3-csi
     region: us-east-1
@@ -9,7 +7,6 @@ odf:
   namespace: openshift-storage
   serviceUrl: "http://rook-ceph-rgw-ocs-storagecluster-cephobjectstore.openshift-storage.svc.cluster.local"
   externalUrl: "https://s3-rgw-openshift-storage"
-  targetBucket: mlflow
   mon:
     requests:
        cpu: 1
@@ -53,8 +50,30 @@ toolbox:
   name: ocsinit
   enableCephTools: true
 
+#Define the CephObjectStorage parameters
+objectStorage:
+  enable: true
+  dataPool:
+    replicas: 3
+  gateway:
+    instances: 2
+  resources:
+    requests:
+      cpu: "1"
+      memory: 4Gi
+    limits:
+      cpu: "2"
+      memory: 6Gi
+
 #Define the odf storageSystem parameters
 storageSystem:
+  inventory:
+    useSpecificNodes: true # true/false to label a specific set of nodes to be part of ODF
+    nodes: # At least specify three nodes
+      - nodeA
+      - nodeB
+      - nodeC
+
   deploy: false
   name: ocs-storagecluster-storagesystem
   namespace: openshift-storage
