@@ -1,0 +1,36 @@
+#############################
+# Start the job on all push #
+#############################
+on: [push, pull_request]
+
+###############
+# Set the Job #
+###############
+jobs:
+  build:
+    # Name the Job
+    name: Unit common/ Code Base
+    # Set the agent to run on
+    runs-on: ubuntu-latest
+
+    ##################
+    # Load all steps #
+    ##################
+    steps:
+      ##########################
+      # Checkout the code base #
+      ##########################
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          # Full git history is needed to get a proper list of changed files within `super-linter`
+          fetch-depth: 0
+
+      - name: Setup helm
+        uses: azure/setup-helm@v4
+        with:
+          version: 'v3.13.2'
+
+      - name: Run make helmlint
+        run: |
+          helm lint
