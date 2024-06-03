@@ -46,10 +46,6 @@ route:
   port:
     targetPort: http
 
-toolbox:
-  name: ocsinit
-  enableCephTools: true
-
 #Define the CephObjectStorage parameters
 objectStorage:
   enable: true
