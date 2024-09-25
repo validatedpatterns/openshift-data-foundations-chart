@@ -1,0 +1,6 @@
+---
+compact: true
+directory:
+  - .
+skip-path:
+  - tests

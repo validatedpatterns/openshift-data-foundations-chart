@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "terminology": {
+      // Excludes terms
+      "exclude": [
+        "URL"
+        ]
+    }
+  }
+}
