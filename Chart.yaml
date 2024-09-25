@@ -1,6 +1,6 @@
 apiVersion: v2
 name: openshift-data-foundations
-description: A Helm chart for Kubernetes
+description: A Helm chart to install ODF on Openshift
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -22,3 +22,9 @@ version: 0.1.0
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
 appVersion: "1.16.0"
+
+home: https://github.com/validatedpatterns/openshift-data-foundations-chart
+maintainers:
+  - name: Validated Patterns Team
+    email: validatedpatterns@googlegroups.com
+icon: https://validatedpatterns.io/images/validated-patterns.png
