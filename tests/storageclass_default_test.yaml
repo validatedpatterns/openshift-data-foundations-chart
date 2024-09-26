@@ -1,0 +1,19 @@
+suite: Test storageclass with default values
+templates:
+  - templates/storageclass.yaml
+release:
+  name: release-test
+tests:
+  - it: Should output default values
+    asserts:
+      - hasDocuments:
+          count: 3
+      - isKind:
+          of: StorageClass
+      - containsDocument:
+          kind: StorageClass
+          apiVersion: storage.k8s.io/v1
+          name: ocs-storagecluster-ceph-rbd
+        documentSelector:
+          path: metadata.name
+          value: ocs-storagecluster-ceph-rbd

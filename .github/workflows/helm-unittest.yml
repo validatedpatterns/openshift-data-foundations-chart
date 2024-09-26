@@ -1,5 +1,5 @@
 ---
-name: Helm lint
+name: Helm Unit Test
 
 #
 # Documentation:
@@ -13,17 +13,13 @@ on: [push, pull_request]
 jobs:
   build:
     name: Run helm lint over the chart
-    runs-on: ubuntu-latest
+    # It has to be 24.04 because -latest has a podman version that is too old
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup helm
-        uses: azure/setup-helm@v4
-        with:
-          version: 'v3.14.0'
-
       - name: Run make helmlint
         run: |
-          make helm-lint
+          make helm-unittest
