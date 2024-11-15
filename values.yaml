@@ -50,8 +50,14 @@ objectStorage:
   enable: true
   dataPool:
     replicas: 3
+    # -- Failuredomain for the dataPool
+    failureDomain: zone
+  metadataPool:
+    # -- Failuredomain for the metadataPool
+    failureDomain: zone
   gateway:
     instances: 2
+
   resources:
     requests:
       cpu: "1"
