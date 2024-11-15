@@ -9,7 +9,7 @@ spec:
     erasureCoded:
       codingChunks: 0
       dataChunks: 0
-    failureDomain: zone
+    failureDomain: {{ .Values.objectStorage.dataPool.failureDomain }}
     replicated:
       size: {{ .Values.objectStorage.dataPool.replicas | default 3 }}
   gateway:
@@ -50,7 +50,7 @@ spec:
     erasureCoded:
       codingChunks: 0
       dataChunks: 0
-    failureDomain: zone
+    failureDomain: {{ .Values.objectStorage.metadataPool.failureDomain }}
     replicated:
       size: 3
 {{- end -}}

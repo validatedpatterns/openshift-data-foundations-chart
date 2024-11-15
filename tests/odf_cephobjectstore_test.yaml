@@ -1,0 +1,81 @@
+suite: Test CephObjectStore
+templates:
+  - templates/odf-cephobjectstore.yaml
+release:
+  name: release-test
+tests:
+  - it: Should output nothing when disabled
+    set:
+      objectStorage:
+        enable: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: Should output default values when not disabled
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: CephObjectStore
+      - containsDocument:
+          kind: CephObjectStore
+          apiVersion: ceph.rook.io/v1
+          name: ocs-storagecluster-cephobjectstore
+      - equal:
+          path: spec.dataPool.replicated.size
+          value: 3
+      - equal:
+          path: spec.gateway.instances
+          value: 2
+      - equal:
+          path: spec.gateway.resources.requests.cpu
+          value: "1"
+      - equal:
+          path: spec.gateway.resources.requests.memory
+          value: "4Gi"
+      - equal:
+          path: spec.gateway.resources.limits.cpu
+          value: "2"
+      - equal:
+          path: spec.gateway.resources.limits.memory
+          value: "6Gi"
+
+  - it: Should output custom failureDomain zones
+    set:
+      objectStorage:
+        dataPool:
+          failureDomain: rack
+        metadataPool:
+          failureDomain: host
+    asserts:
+      - equal:
+          path: spec.dataPool.failureDomain
+          value: rack
+      - equal:
+          path: spec.metadataPool.failureDomain
+          value: host
+
+  - it: Should output custom resource request limits
+    set:
+      objectStorage:
+        resources:
+          requests:
+            cpu: 10
+            memory: 100Gi
+          limits:
+            cpu: 100
+            memory: 200Gi
+    asserts:
+      - equal:
+          path: spec.gateway.resources.requests.cpu
+          value: "10"
+      - equal:
+          path: spec.gateway.resources.requests.memory
+          value: "100Gi"
+      - equal:
+          path: spec.gateway.resources.limits.cpu
+          value: "100"
+      - equal:
+          path: spec.gateway.resources.limits.memory
+          value: "200Gi"
