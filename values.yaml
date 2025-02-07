@@ -51,10 +51,10 @@ objectStorage:
   dataPool:
     replicas: 3
     # -- Failuredomain for the dataPool
-    failureDomain: zone
+    failureDomain: host
   metadataPool:
     # -- Failuredomain for the metadataPool
-    failureDomain: zone
+    failureDomain: host
   gateway:
     instances: 2
 

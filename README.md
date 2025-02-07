@@ -1,6 +1,6 @@
 # openshift-data-foundations
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart to install ODF on Openshift
 
@@ -12,17 +12,22 @@ A Helm chart to install ODF on Openshift
 | ---- | ------ | --- |
 | Validated Patterns Team | <validatedpatterns@googlegroups.com> |  |
 
+## Notes
+
+This branch currently tracks the v0.2.x releases which use the host as a
+default failure domain for objectStorage.
+
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | global.datacenter.storageClassName | string | `"gp3-csi"` |  |
 | job.image | string | `"image-registry.openshift-image-registry.svc:5000/openshift/cli:latest"` |  |
-| objectStorage.dataPool.failureDomain | string | `"zone"` | Failuredomain for the dataPool |
+| objectStorage.dataPool.failureDomain | string | `"host"` | Failuredomain for the dataPool |
 | objectStorage.dataPool.replicas | int | `3` |  |
 | objectStorage.enable | bool | `true` |  |
 | objectStorage.gateway.instances | int | `2` |  |
-| objectStorage.metadataPool.failureDomain | string | `"zone"` | Failuredomain for the metadataPool |
+| objectStorage.metadataPool.failureDomain | string | `"host"` | Failuredomain for the metadataPool |
 | objectStorage.resources.limits.cpu | string | `"2"` |  |
 | objectStorage.resources.limits.memory | string | `"6Gi"` |  |
 | objectStorage.resources.requests.cpu | string | `"1"` |  |
