@@ -4,6 +4,10 @@ metadata:
   namespace: {{ .Values.odf.namespace }}
   name: ocs-storagecluster
 spec:
+{{- if .Values.odf.enable_mirroring }}
+  mirroring:
+    enabled: true
+{{- end }}
   resources:
     mon:
       requests:
