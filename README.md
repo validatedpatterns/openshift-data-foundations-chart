@@ -4,6 +4,10 @@
 
 A Helm chart to install ODF on Openshift
 
+### Notable changes
+
+* v0.2.1: Introduce boolean to configure where mirroring is enabled. Needed for RamenDR. Defaults to false
+
 **Homepage:** <https://github.com/validatedpatterns/openshift-data-foundations-chart>
 
 ## Maintainers
