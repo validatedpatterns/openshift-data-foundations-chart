@@ -1,8 +1,12 @@
 # openshift-data-foundations
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart to install ODF on Openshift
+
+### Notable changes
+
+* v0.2.1: Introduce boolean to configure where mirroring is enabled. Needed for RamenDR. Defaults to false
 
 **Homepage:** <https://github.com/validatedpatterns/openshift-data-foundations-chart>
 
@@ -32,6 +36,7 @@ default failure domain for objectStorage.
 | objectStorage.resources.limits.memory | string | `"6Gi"` |  |
 | objectStorage.resources.requests.cpu | string | `"1"` |  |
 | objectStorage.resources.requests.memory | string | `"4Gi"` |  |
+| odf.enable_mirroring | bool | `false` |  |
 | odf.externalUrl | string | `"https://s3-rgw-openshift-storage"` |  |
 | odf.mds.requests.cpu | int | `3` |  |
 | odf.mds.requests.memory | string | `"8Gi"` |  |
