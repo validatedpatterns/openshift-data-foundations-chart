@@ -1,11 +1,12 @@
 # openshift-data-foundations
 
-![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart to install ODF on Openshift
 
 ### Notable changes
 
+* v0.2.2: Reconfigure sync ordering to ensure label job runs before attempts to create storagecluster/storagesystem
 * v0.2.1: Introduce boolean to configure where mirroring is enabled. Needed for RamenDR. Defaults to false
 
 **Homepage:** <https://github.com/validatedpatterns/openshift-data-foundations-chart>
