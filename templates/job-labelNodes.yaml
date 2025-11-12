@@ -19,7 +19,7 @@ spec:
           oc label node {{ . }} cluster.ocs.openshift.io/openshift-storage='' --overwrite
           {{- end }}
           {{- else }}
-          oc label nodes -l '{{ $.Values.storageSystem.inventory.nodeJobLabelSelector }}' cluster.ocs.openshift.io/openshift-storage='' --overwrite
+          oc label nodes -l {{ $.Values.storageSystem.inventory.nodeJobLabelSelector | squote }} cluster.ocs.openshift.io/openshift-storage='' --overwrite
           LABELED_COUNT=$(oc get nodes -l cluster.ocs.openshift.io/openshift-storage --no-headers 2>/dev/null | wc -l)
           if [ "$LABELED_COUNT" -lt 3 ]; then
             echo "Error: Only $LABELED_COUNT node(s) were labeled. At least 3 nodes must be labeled."
