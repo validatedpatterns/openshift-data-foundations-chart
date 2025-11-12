@@ -19,7 +19,13 @@ spec:
           oc label node {{ . }} cluster.ocs.openshift.io/openshift-storage='' --overwrite
           {{- end }}
           {{- else }}
-          oc label nodes -l node-role.kubernetes.io/worker= cluster.ocs.openshift.io/openshift-storage='' --overwrite
+          oc label nodes -l {{ $.Values.storageSystem.inventory.nodeJobLabelSelector | squote }} cluster.ocs.openshift.io/openshift-storage='' --overwrite
+          LABELED_COUNT=$(oc get nodes -l cluster.ocs.openshift.io/openshift-storage --no-headers 2>/dev/null | wc -l)
+          if [ "$LABELED_COUNT" -lt 3 ]; then
+            echo "Error: Only $LABELED_COUNT node(s) were labeled. At least 3 nodes must be labeled."
+            exit 1
+          fi
+          echo "Successfully labeled $LABELED_COUNT node(s)"
           {{- end }}
         name: label-storage-nodes
       dnsPolicy: ClusterFirst

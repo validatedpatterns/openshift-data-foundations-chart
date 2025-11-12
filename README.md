@@ -1,12 +1,16 @@
 # openshift-data-foundations
 
-![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.2.3](https://img.shields.io/badge/Version-0.2.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart to install ODF on Openshift
 
 ### Notable changes
 
+* v0.2.3: Allow passing of label selector to labelling job to avoid, for example, labelling submariner nodes.
+          Also ensure at least 3 nodes are labelled when using label selector.
+
 * v0.2.2: Reconfigure sync ordering to ensure label job runs before attempts to create storagecluster/storagesystem
+
 * v0.2.1: Introduce boolean to configure where mirroring is enabled. Needed for RamenDR. Defaults to false
 
 **Homepage:** <https://github.com/validatedpatterns/openshift-data-foundations-chart>
@@ -81,6 +85,7 @@ default failure domain for objectStorage.
 | route.service.weight | int | `100` |  |
 | serviceAccountName | string | `"odf-node-label-sa"` |  |
 | storageSystem.deploy | bool | `false` |  |
+| storageSystem.inventory.nodeJobLabelSelector | string | `"node-role.kubernetes.io/worker="` |  |
 | storageSystem.inventory.nodes[0] | string | `"nodeA"` |  |
 | storageSystem.inventory.nodes[1] | string | `"nodeB"` |  |
 | storageSystem.inventory.nodes[2] | string | `"nodeC"` |  |
