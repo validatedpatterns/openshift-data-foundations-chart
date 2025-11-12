@@ -70,6 +70,7 @@ objectStorage:
 #Define the odf storageSystem parameters
 storageSystem:
   inventory:
+    nodeJobLabelSelector: 'node-role.kubernetes.io/worker='
     useSpecificNodes: true # true/false to label a specific set of nodes to be part of ODF
     nodes: # At least specify three nodes
       - nodeA

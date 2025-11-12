@@ -7,7 +7,11 @@
 
 ### Notable changes
 
+* v0.2.3: Allow passing of label selector to labelling job to avoid, for example, labelling submariner nodes.
+          Also ensure at least 3 nodes are labelled when using label selector.
+
 * v0.2.2: Reconfigure sync ordering to ensure label job runs before attempts to create storagecluster/storagesystem
+
 * v0.2.1: Introduce boolean to configure where mirroring is enabled. Needed for RamenDR. Defaults to false
 
 {{ template "chart.homepageLine" . }}
