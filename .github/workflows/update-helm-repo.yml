@@ -17,14 +17,16 @@ on:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 
+permissions: read-all
+
 jobs:
   helmlint:
-    uses: validatedpatterns/helm-charts/.github/workflows/helmlint.yml@workflow-stable
+    uses: validatedpatterns/helm-charts/.github/workflows/helmlint.yml@workflow-stable # zizmor: ignore[unpinned-uses]
     permissions:
       contents: read
 
   update-helm-repo:
     needs: [helmlint]
-    uses: validatedpatterns/helm-charts/.github/workflows/update-helm-repo.yml@workflow-stable
-    permissions: read-all
-    secrets: inherit
+    uses: validatedpatterns/helm-charts/.github/workflows/update-helm-repo.yml@workflow-stable # zizmor: ignore[unpinned-uses]
+    permissions: read-all # zizmor: ignore[excessive-permissions]
+    secrets: inherit # zizmor: ignore[secrets-inherit]

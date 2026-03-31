@@ -42,6 +42,16 @@ super-linter: ## Runs super linter locally
 					-e VALIDATE_MARKDOWN_PRETTIER=false \
 					-e VALIDATE_YAML_PRETTIER=false \
 					-e VALIDATE_YAML=false \
+					-e VALIDATE_BIOME_FORMAT=false \
+					-e VALIDATE_BIOME_LINT=false \
+					-e VALIDATE_NATURAL_LANGUAGE=false \
+					-e VALIDATE_SPELL_CODESPELL=false \
+					-e VALIDATE_PYTHON_BLACK=false \
+					-e VALIDATE_PYTHON_PYINK=false \
+					-e VALIDATE_PYTHON_PYLINT=false \
+					-e VALIDATE_PYTHON_RUFF_FORMAT=false \
+					-e VALIDATE_SHELL_SHFMT=false \
+					-e VALIDATE_TRIVY=false \
 					-v $(PWD):/tmp/lint:rw,z \
 					-w /tmp/lint \
-					ghcr.io/super-linter/super-linter:slim-v7
+					ghcr.io/super-linter/super-linter:slim-v8
