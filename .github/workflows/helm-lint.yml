@@ -6,7 +6,7 @@ name: Helm lint
 # https://help.github.com/en/articles/workflow-syntax-for-github-actions
 #
 
-permissions: read-all
+permissions: read-all # zizmor: ignore[excessive-permissions]
 
 on: [push, pull_request]
 
@@ -17,10 +17,12 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
 
       - name: Setup helm
-        uses: azure/setup-helm@v5
+        uses: azure/setup-helm@dda3372f752e03dde6b3237bc9431cdc2f7a02a2 # v5.0.0
         with:
           version: 'v3.14.0'
 
