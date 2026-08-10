@@ -1,10 +1,15 @@
 # openshift-data-foundations
 
-![Version: 0.2.3](https://img.shields.io/badge/Version-0.2.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart to install ODF on Openshift
 
 ### Notable changes
+
+* v0.3.0: Replace `global.datacenter.storageClassName` with `odf.osd.pvc.storageClassName`.
+          When unset, the OSD storage class is derived from `global.clusterPlatform`
+          (AWS: `gp3-csi`, Azure: `managed-csi`, GCP: `standard-csi`).
+          This is a backwards-incompatible change.
 
 * v0.2.3: Allow passing of label selector to labelling job to avoid, for example, labelling submariner nodes.
           Also ensure at least 3 nodes are labelled when using label selector.
@@ -23,14 +28,14 @@ A Helm chart to install ODF on Openshift
 
 ## Notes
 
-This branch currently tracks the v0.2.x releases which use the host as a
+This branch currently tracks the v0.3.x releases which use the host as a
 default failure domain for objectStorage.
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| global.datacenter.storageClassName | string | `"gp3-csi"` |  |
+| global.clusterPlatform | string | `""` | OpenShift cluster platform (AWS, Azure, GCP). Used to select the default OSD storage class when odf.osd.pvc.storageClassName is empty. |
 | job.image | string | `"image-registry.openshift-image-registry.svc:5000/openshift/cli:latest"` |  |
 | objectStorage.dataPool.failureDomain | string | `"host"` | Failuredomain for the dataPool |
 | objectStorage.dataPool.replicas | int | `3` |  |
@@ -55,6 +60,7 @@ default failure domain for objectStorage.
 | odf.noobaadb.requests.cpu | int | `1` |  |
 | odf.noobaadb.requests.memory | string | `"4Gi"` |  |
 | odf.osd.pvc.storage | string | `"2Ti"` |  |
+| odf.osd.pvc.storageClassName | string | `""` | Storage class for ODF OSD volumes. Empty selects a platform default from global.clusterPlatform (AWS: gp3-csi, Azure: managed-csi, GCP: standard-csi). |
 | odf.osd.requests.cpu | int | `2` |  |
 | odf.osd.requests.memory | string | `"5Gi"` |  |
 | odf.serviceUrl | string | `"http://rook-ceph-rgw-ocs-storagecluster-cephobjectstore.openshift-storage.svc.cluster.local"` |  |
