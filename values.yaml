@@ -121,3 +121,9 @@ rbac:
 
 job:
   image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+  # -- Cron schedule for re-labeling storage nodes after the initial Job (UTC).
+  schedule: "*/15 * * * *"
+  # -- successfulJobsHistoryLimit for the label-storage-nodes CronJob.
+  successfulJobsHistoryLimit: 3
+  # -- failedJobsHistoryLimit for the label-storage-nodes CronJob.
+  failedJobsHistoryLimit: 1

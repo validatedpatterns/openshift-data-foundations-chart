@@ -24,3 +24,41 @@ standard-csi
 {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Bash script used by the label-storage-nodes Job and CronJob.
+Respects storageSystem.inventory.useSpecificNodes vs nodeJobLabelSelector.
+*/}}
+{{- define "odf.labelStorageNodes.script" -}}
+{{- if .Values.storageSystem.inventory.useSpecificNodes }}
+{{- range .Values.storageSystem.inventory.nodes }}
+oc label node {{ . }} cluster.ocs.openshift.io/openshift-storage='' --overwrite
+{{- end }}
+{{- else }}
+oc label nodes -l {{ .Values.storageSystem.inventory.nodeJobLabelSelector | squote }} cluster.ocs.openshift.io/openshift-storage='' --overwrite
+LABELED_COUNT=$(oc get nodes -l cluster.ocs.openshift.io/openshift-storage --no-headers 2>/dev/null | wc -l)
+if [ "$LABELED_COUNT" -lt 3 ]; then
+  echo "Error: Only $LABELED_COUNT node(s) were labeled. At least 3 nodes must be labeled."
+  exit 1
+fi
+echo "Successfully labeled $LABELED_COUNT node(s)"
+{{- end }}
+{{- end }}
+
+{{/*
+Pod spec shared by the label-storage-nodes Job and CronJob.
+*/}}
+{{- define "odf.labelStorageNodes.podSpec" -}}
+containers:
+- image: {{ .Values.job.image }}
+  command:
+  - /bin/bash
+  - -c
+  - |
+    {{- include "odf.labelStorageNodes.script" . | nindent 4 }}
+  name: label-storage-nodes
+dnsPolicy: ClusterFirst
+restartPolicy: Never
+serviceAccountName: {{ .Values.serviceAccountName }}
+terminationGracePeriodSeconds: 400
+{{- end }}

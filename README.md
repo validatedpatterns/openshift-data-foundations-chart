@@ -10,6 +10,8 @@ A Helm chart to install ODF on Openshift
           When unset, the OSD storage class is derived from `global.clusterPlatform`
           (AWS: `gp3-csi`, Azure: `managed-csi`, GCP: `standard-csi`).
           This is a backwards-incompatible change.
+          Also add a CronJob that periodically re-runs the same node-labeling
+          logic as the bootstrap Job (same useSpecificNodes / selector conditions).
 
 * v0.2.3: Allow passing of label selector to labelling job to avoid, for example, labelling submariner nodes.
           Also ensure at least 3 nodes are labelled when using label selector.
@@ -36,7 +38,10 @@ default failure domain for objectStorage.
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | global.clusterPlatform | string | `""` | OpenShift cluster platform (AWS, Azure, GCP). Used to select the default OSD storage class when odf.osd.pvc.storageClassName is empty. |
+| job.failedJobsHistoryLimit | int | `1` | failedJobsHistoryLimit for the label-storage-nodes CronJob. |
 | job.image | string | `"image-registry.openshift-image-registry.svc:5000/openshift/cli:latest"` |  |
+| job.schedule | string | `"*/15 * * * *"` | Cron schedule for re-labeling storage nodes after the initial Job (UTC). |
+| job.successfulJobsHistoryLimit | int | `3` | successfulJobsHistoryLimit for the label-storage-nodes CronJob. |
 | objectStorage.dataPool.failureDomain | string | `"host"` | Failuredomain for the dataPool |
 | objectStorage.dataPool.replicas | int | `3` |  |
 | objectStorage.enable | bool | `true` |  |
