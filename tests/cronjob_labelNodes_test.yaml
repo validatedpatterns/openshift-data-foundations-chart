@@ -1,0 +1,59 @@
+suite: Test label-storage-nodes CronJob
+templates:
+  - templates/cronjob-labelNodes.yaml
+release:
+  name: release-test
+tests:
+  - it: Should render CronJob with default schedule
+    asserts:
+      - isKind:
+          of: CronJob
+      - equal:
+          path: metadata.name
+          value: cronjob-label-storage-nodes
+      - equal:
+          path: spec.schedule
+          value: "*/15 * * * *"
+      - equal:
+          path: spec.concurrencyPolicy
+          value: Forbid
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.serviceAccountName
+          value: odf-node-label-sa
+
+  - it: Should honor custom schedule
+    set:
+      job:
+        schedule: "0 * * * *"
+    asserts:
+      - equal:
+          path: spec.schedule
+          value: "0 * * * *"
+
+  - it: Should label specific nodes when useSpecificNodes is true
+    set:
+      storageSystem:
+        inventory:
+          useSpecificNodes: true
+          nodes:
+            - nodeA
+            - nodeB
+            - nodeC
+    asserts:
+      - matchRegex:
+          path: spec.jobTemplate.spec.template.spec.containers[0].command[2]
+          pattern: oc label node nodeA
+
+  - it: Should use label selector when useSpecificNodes is false
+    set:
+      storageSystem:
+        inventory:
+          useSpecificNodes: false
+          nodeJobLabelSelector: "node-role.kubernetes.io/worker="
+    asserts:
+      - matchRegex:
+          path: spec.jobTemplate.spec.template.spec.containers[0].command[2]
+          pattern: oc label nodes -l 'node-role.kubernetes.io/worker='
+      - matchRegex:
+          path: spec.jobTemplate.spec.template.spec.containers[0].command[2]
+          pattern: LABELED_COUNT=

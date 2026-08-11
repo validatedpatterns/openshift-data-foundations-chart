@@ -1,6 +1,6 @@
 global:
-  datacenter:
-    storageClassName: gp3-csi
+  # -- OpenShift cluster platform (AWS, Azure, GCP). Used to select the default OSD storage class when odf.osd.pvc.storageClassName is empty.
+  clusterPlatform: ""
 
 odf:
   namespace: openshift-storage
@@ -33,6 +33,8 @@ odf:
       memory: 5Gi
     pvc:
       storage: 2Ti
+      # -- Storage class for ODF OSD volumes. Empty selects a platform default from global.clusterPlatform (AWS: gp3-csi, Azure: managed-csi, GCP: standard-csi).
+      storageClassName: ""
   storageClass:
     name: ocs-storagecluster-ceph-rgw
     # name: openshift-storage.noobaa.io
@@ -119,3 +121,9 @@ rbac:
 
 job:
   image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+  # -- Cron schedule for re-labeling storage nodes after the initial Job (UTC).
+  schedule: "*/15 * * * *"
+  # -- successfulJobsHistoryLimit for the label-storage-nodes CronJob.
+  successfulJobsHistoryLimit: 3
+  # -- failedJobsHistoryLimit for the label-storage-nodes CronJob.
+  failedJobsHistoryLimit: 1

@@ -1,0 +1,59 @@
+suite: Test ODF StorageCluster OSD storage class
+templates:
+  - templates/odf-storagecluster.yaml
+release:
+  name: release-test
+tests:
+  - it: Should default to gp3-csi when clusterPlatform is unset
+    asserts:
+      - equal:
+          path: spec.storageDeviceSets[0].dataPVCTemplate.spec.storageClassName
+          value: gp3-csi
+
+  - it: Should default to gp3-csi on AWS
+    set:
+      global:
+        clusterPlatform: AWS
+    asserts:
+      - equal:
+          path: spec.storageDeviceSets[0].dataPVCTemplate.spec.storageClassName
+          value: gp3-csi
+
+  - it: Should default to managed-csi on Azure
+    set:
+      global:
+        clusterPlatform: Azure
+    asserts:
+      - equal:
+          path: spec.storageDeviceSets[0].dataPVCTemplate.spec.storageClassName
+          value: managed-csi
+
+  - it: Should default to standard-csi on GCP
+    set:
+      global:
+        clusterPlatform: GCP
+    asserts:
+      - equal:
+          path: spec.storageDeviceSets[0].dataPVCTemplate.spec.storageClassName
+          value: standard-csi
+
+  - it: Should allow overriding the platform default
+    set:
+      global:
+        clusterPlatform: AWS
+      odf:
+        osd:
+          pvc:
+            storageClassName: custom-csi
+    asserts:
+      - equal:
+          path: spec.storageDeviceSets[0].dataPVCTemplate.spec.storageClassName
+          value: custom-csi
+
+  - it: Should fail when platform is unsupported and no override is set
+    set:
+      global:
+        clusterPlatform: BareMetal
+    asserts:
+      - failedTemplate:
+          errorMessage: 'Set odf.osd.pvc.storageClassName or use a supported global.clusterPlatform (AWS, Azure, GCP); got "BareMetal"'

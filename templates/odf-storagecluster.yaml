@@ -43,7 +43,7 @@ spec:
     dataPVCTemplate:
       metadata: {}
       spec:
-        storageClassName: {{ .Values.global.datacenter.storageClassName }}
+        storageClassName: {{ include "odf.osd.storageClassName" . }}
         accessModes:
         - ReadWriteOnce
         volumeMode: Block
