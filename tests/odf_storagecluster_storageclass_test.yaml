@@ -57,3 +57,30 @@ tests:
     asserts:
       - failedTemplate:
           errorMessage: 'Set odf.osd.pvc.storageClassName or use a supported global.clusterPlatform (AWS, Azure, GCP); got "BareMetal"'
+
+  - it: Should disable NooBaa when object storage is disabled
+    set:
+      objectStorage:
+        enable: false
+    asserts:
+      - equal:
+          path: spec.multiCloudGateway.reconcileStrategy
+          value: ignore
+      - isNull:
+          path: spec.resources.noobaa-core
+      - isNull:
+          path: spec.resources.noobaa-db
+
+  - it: Should configure NooBaa resources when object storage is enabled
+    set:
+      objectStorage:
+        enable: true
+    asserts:
+      - isNull:
+          path: spec.multiCloudGateway
+      - equal:
+          path: spec.resources.noobaa-core.requests.cpu
+          value: "1"
+      - equal:
+          path: spec.resources.noobaa-db.requests.memory
+          value: 4Gi

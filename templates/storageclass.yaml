@@ -41,6 +41,7 @@ parameters:
 provisioner: openshift-storage.cephfs.csi.ceph.com
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
+{{- if .Values.objectStorage.enable }}
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -53,3 +54,4 @@ parameters:
 provisioner: openshift-storage.noobaa.io/obc
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
+{{- end }}

@@ -44,7 +44,7 @@ default failure domain for objectStorage.
 | job.successfulJobsHistoryLimit | int | `3` | successfulJobsHistoryLimit for the label-storage-nodes CronJob. |
 | objectStorage.dataPool.failureDomain | string | `"host"` | Failuredomain for the dataPool |
 | objectStorage.dataPool.replicas | int | `3` |  |
-| objectStorage.enable | bool | `true` |  |
+| objectStorage.enable | bool | `true` | Deploy object storage (Ceph RGW, NooBaa MCG, and related StorageClasses/Routes). When false, NooBaa reconciliation is disabled. |
 | objectStorage.gateway.instances | int | `2` |  |
 | objectStorage.metadataPool.failureDomain | string | `"host"` | Failuredomain for the metadataPool |
 | objectStorage.resources.limits.cpu | string | `"2"` |  |

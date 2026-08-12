@@ -1,3 +1,4 @@
+{{- if .Values.objectStorage.enable -}}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
@@ -22,3 +23,4 @@ spec:
     termination: edge
     insecureEdgeTerminationPolicy: Allow
   wildcardPolicy: None
+{{- end -}}

@@ -50,6 +50,7 @@ route:
 
 #Define the CephObjectStorage parameters
 objectStorage:
+  # -- Deploy object storage (Ceph RGW, NooBaa MCG, and related StorageClasses/Routes). When false, NooBaa reconciliation is disabled.
   enable: true
   dataPool:
     replicas: 3

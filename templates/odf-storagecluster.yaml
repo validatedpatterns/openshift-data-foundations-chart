@@ -8,6 +8,10 @@ spec:
   mirroring:
     enabled: true
 {{- end }}
+{{- if not .Values.objectStorage.enable }}
+  multiCloudGateway:
+    reconcileStrategy: ignore
+{{- end }}
   resources:
     mon:
       requests:
@@ -21,6 +25,7 @@ spec:
       requests:
         cpu: {{ .Values.odf.mgr.requests.cpu | squote }}
         memory: {{ .Values.odf.mgr.requests.memory }}
+{{- if .Values.objectStorage.enable }}
     noobaa-core:
       requests:
         cpu: {{ .Values.odf.noobaacore.requests.cpu | squote }}
@@ -29,6 +34,7 @@ spec:
       requests:
         cpu: {{ .Values.odf.noobaadb.requests.cpu | squote }}
         memory: {{ .Values.odf.noobaadb.requests.memory }}
+{{- end }}
   storageDeviceSets:
   - name: ocs-deviceset
     config: {}
