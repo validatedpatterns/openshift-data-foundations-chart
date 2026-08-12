@@ -7,13 +7,14 @@
 
 ### Notable changes
 
+* v0.3.1: Make `objectStorage.enable`: `false` cover more resources.
+
 * v0.3.0: Replace `global.datacenter.storageClassName` with `odf.osd.pvc.storageClassName`.
           When unset, the OSD storage class is derived from `global.clusterPlatform`
           (AWS: `gp3-csi`, Azure: `managed-csi`, GCP: `standard-csi`).
           This is a backwards-incompatible change.
           Also add a CronJob that periodically re-runs the same node-labeling
           logic as the bootstrap Job (same useSpecificNodes / selector conditions).
-
 
 * v0.2.3: Allow passing of label selector to labelling job to avoid, for example, labelling submariner nodes.
           Also ensure at least 3 nodes are labelled when using label selector.

@@ -1,10 +1,12 @@
 # openshift-data-foundations
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart to install ODF on Openshift
 
 ### Notable changes
+
+* v0.3.1: Make `objectStorage.enable`: `false` cover more resources.
 
 * v0.3.0: Replace `global.datacenter.storageClassName` with `odf.osd.pvc.storageClassName`.
           When unset, the OSD storage class is derived from `global.clusterPlatform`
@@ -44,7 +46,7 @@ default failure domain for objectStorage.
 | job.successfulJobsHistoryLimit | int | `3` | successfulJobsHistoryLimit for the label-storage-nodes CronJob. |
 | objectStorage.dataPool.failureDomain | string | `"host"` | Failuredomain for the dataPool |
 | objectStorage.dataPool.replicas | int | `3` |  |
-| objectStorage.enable | bool | `true` |  |
+| objectStorage.enable | bool | `true` | Deploy object storage (Ceph RGW, NooBaa MCG, and related StorageClasses/Routes). When false, NooBaa reconciliation is disabled. |
 | objectStorage.gateway.instances | int | `2` |  |
 | objectStorage.metadataPool.failureDomain | string | `"host"` | Failuredomain for the metadataPool |
 | objectStorage.resources.limits.cpu | string | `"2"` |  |

@@ -17,3 +17,13 @@ tests:
         documentSelector:
           path: metadata.name
           value: ocs-storagecluster-ceph-rbd
+
+  - it: Should omit NooBaa StorageClass when object storage is disabled
+    set:
+      objectStorage:
+        enable: false
+    asserts:
+      - hasDocuments:
+          count: 2
+      - notMatchRegexRaw:
+          pattern: openshift-storage\.noobaa\.io

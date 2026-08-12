@@ -1,3 +1,4 @@
+{{- if .Values.objectStorage.enable -}}
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
@@ -10,3 +11,4 @@ parameters:
   objectStoreNamespace: {{ .Values.odf.namespace }}
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
+{{- end -}}
