@@ -35,6 +35,10 @@ odf:
       storage: 2Ti
       # -- Storage class for ODF OSD volumes. Empty selects a platform default from global.clusterPlatform (AWS: gp3-csi, Azure: managed-csi, GCP: standard-csi).
       storageClassName: ""
+  # -- Optional preparePlacement for OSD device sets. When set, overrides the default empty
+  # preparePlacement on the StorageCluster storageDeviceSets, allowing topology spread
+  # constraints or affinity rules to control OSD prepare pod scheduling.
+  preparePlacement: {}
   storageClass:
     name: ocs-storagecluster-ceph-rgw
     # name: openshift-storage.noobaa.io

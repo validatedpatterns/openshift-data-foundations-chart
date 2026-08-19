@@ -1,6 +1,6 @@
 # openshift-data-foundations
 
-![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart to install ODF on Openshift
 
@@ -70,6 +70,7 @@ default failure domain for objectStorage.
 | odf.osd.pvc.storageClassName | string | `""` | Storage class for ODF OSD volumes. Empty selects a platform default from global.clusterPlatform (AWS: gp3-csi, Azure: managed-csi, GCP: standard-csi). |
 | odf.osd.requests.cpu | int | `2` |  |
 | odf.osd.requests.memory | string | `"5Gi"` |  |
+| odf.preparePlacement | object | `{}` | Optional preparePlacement for OSD device sets. When set, overrides the default empty preparePlacement on the StorageCluster storageDeviceSets, allowing topology spread constraints or affinity rules to control OSD prepare pod scheduling. |
 | odf.serviceUrl | string | `"http://rook-ceph-rgw-ocs-storagecluster-cephobjectstore.openshift-storage.svc.cluster.local"` |  |
 | odf.storageClass.name | string | `"ocs-storagecluster-ceph-rgw"` |  |
 | odf.storageClass.objectStoreName | string | `"ocs-storagecluster-cephobjectstore"` |  |
