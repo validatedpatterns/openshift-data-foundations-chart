@@ -45,7 +45,10 @@ spec:
         cpu: {{ .Values.odf.osd.requests.cpu | squote }}
         memory: {{ .Values.odf.osd.requests.memory }}
     placement: {}
-    preparePlacement: {}
+    preparePlacement:
+{{- if .Values.odf.preparePlacement }}
+{{ .Values.odf.preparePlacement | toYaml | indent 6 }}
+{{- end }}
     dataPVCTemplate:
       metadata: {}
       spec:
