@@ -2,10 +2,22 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   annotations:
-    argocd.argoproj.io/sync-wave: "-2"
+    argocd.argoproj.io/sync-wave: "-1"
   name: job-label-storage-nodes
   namespace: {{ .Values.odf.namespace }}
 spec:
+  # A drain-evicted (cancelled) pod is ignored rather than counted as a
+  # failure: the Job stays incomplete and a replacement pod retries the
+  # labeling. Only genuine failures count toward backoffLimit.
+  podFailurePolicy:
+    rules:
+      - action: Ignore
+        onExitCodes:
+          containerName: label-storage-nodes
+          values: [143]
+      - action: Ignore
+        onDisruptionConditions:
+          - type: DisruptionTarget
   template:
     spec:
       {{- include "odf.labelStorageNodes.podSpec" . | nindent 6 }}

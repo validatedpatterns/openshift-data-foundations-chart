@@ -17,7 +17,7 @@ tests:
       - equal:
           path: metadata.annotations
           value:
-            argocd.argoproj.io/sync-wave: "-1"
+            argocd.argoproj.io/sync-wave: "-2"
       - equal:
           path: spec.template.spec.serviceAccountName
           value: odf-node-label-sa
@@ -36,6 +36,30 @@ tests:
       - matchRegex:
           path: spec.template.spec.containers[0].command[2]
           pattern: set -euo pipefail
+
+  - it: Should be cancelable without being marked successful
+    asserts:
+      # SIGTERM trap exits 143 (nonzero) so the Job never completes on cancel
+      - matchRegex:
+          path: spec.template.spec.containers[0].command[2]
+          pattern: trap '.*exit 143' TERM
+      - equal:
+          path: spec.template.spec.terminationGracePeriodSeconds
+          value: 60
+      # Drain evictions are ignored, not counted as failures
+      - equal:
+          path: spec.podFailurePolicy.rules[0].action
+          value: Ignore
+      - equal:
+          path: spec.podFailurePolicy.rules[0].onExitCodes.values
+          value: [143]
+      - equal:
+          path: spec.podFailurePolicy.rules[1].action
+          value: Ignore
+      - equal:
+          path: spec.podFailurePolicy.rules[1].onDisruptionConditions[0].type
+          value: DisruptionTarget
+
 
   - it: Should support custom pools and timeout
     set:

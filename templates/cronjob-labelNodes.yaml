@@ -12,6 +12,17 @@ spec:
   failedJobsHistoryLimit: {{ .Values.job.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
+      # A drain-evicted (cancelled) pod is ignored rather than counted as a
+      # failure; only genuine failures count toward backoffLimit.
+      podFailurePolicy:
+        rules:
+          - action: Ignore
+            onExitCodes:
+              containerName: label-storage-nodes
+              values: [143]
+          - action: Ignore
+            onDisruptionConditions:
+              - type: DisruptionTarget
       template:
         spec:
           {{- include "odf.labelStorageNodes.podSpec" . | nindent 10 }}
