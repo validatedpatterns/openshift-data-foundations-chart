@@ -62,3 +62,45 @@ restartPolicy: Never
 serviceAccountName: {{ .Values.serviceAccountName }}
 terminationGracePeriodSeconds: 400
 {{- end }}
+
+{{/*
+Bash script used by the wait-for-mcp Job. Waits for each configured
+MachineConfigPool to finish reconciling (Updated=True) and fails if any
+pool is Degraded. This gates StorageCluster creation so Ceph monitor
+formation does not race an MCO rolling reboot triggered by node labeling.
+*/}}
+{{- define "odf.waitForMcp.script" -}}
+set -euo pipefail
+{{- range .Values.waitForMcp.pools }}
+echo "Waiting for MachineConfigPool {{ . }} to finish updating..."
+if ! oc wait machineconfigpool/{{ . }} --for=condition=Updated --timeout={{ $.Values.waitForMcp.timeout }}s; then
+  echo "Error: MachineConfigPool {{ . }} did not reach Updated within {{ $.Values.waitForMcp.timeout }}s."
+  exit 1
+fi
+DEGRADED=$(oc get machineconfigpool/{{ . }} -o jsonpath='{.status.conditions[?(@.type=="Degraded")].status}')
+if [ "$DEGRADED" = "True" ]; then
+  echo "Error: MachineConfigPool {{ . }} is Degraded."
+  exit 1
+fi
+echo "MachineConfigPool {{ . }} is updated and healthy."
+{{- end }}
+echo "All MachineConfigPools reconciled."
+{{- end }}
+
+{{/*
+Pod spec for the wait-for-mcp Job.
+*/}}
+{{- define "odf.waitForMcp.podSpec" -}}
+containers:
+- image: {{ .Values.job.image }}
+  command:
+  - /bin/bash
+  - -c
+  - |
+    {{- include "odf.waitForMcp.script" . | nindent 4 }}
+  name: wait-for-mcp
+dnsPolicy: ClusterFirst
+restartPolicy: Never
+serviceAccountName: {{ .Values.serviceAccountName }}
+terminationGracePeriodSeconds: 400
+{{- end }}

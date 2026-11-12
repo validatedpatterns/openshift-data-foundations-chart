@@ -6,6 +6,15 @@ A Helm chart to install ODF on Openshift
 
 ### Notable changes
 
+* v0.3.4: Add a `job-wait-for-mcp` Job (sync-wave -1, between the node-labeling
+          Job and the StorageCluster) that waits for the configured
+          MachineConfigPools (default: `worker`) to finish reconciling before
+          the StorageCluster is created. Labeling nodes for ODF can trigger an
+          MCO rolling reboot, and forming Ceph monitors mid-rollout can strand
+          monitor PVCs in the wrong availability zone. Controlled by
+          `waitForMcp.enabled` (default `true`), `waitForMcp.pools`, and
+          `waitForMcp.timeout`.
+
 * v0.3.3: Only emit `preparePlacement` when overridden. Otherwise the application may go out-of-sync on ArgoCD.
 
 * v0.3.2: Make `preparePlacement` configurable.
