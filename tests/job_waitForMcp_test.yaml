@@ -1,0 +1,88 @@
+suite: Test wait-for-mcp Job
+templates:
+  - templates/job-waitForMcp.yaml
+release:
+  name: release-test
+tests:
+  - it: Should render the Job with default values
+    asserts:
+      - isKind:
+          of: Job
+      - equal:
+          path: metadata.name
+          value: job-wait-for-mcp
+      - equal:
+          path: metadata.namespace
+          value: openshift-storage
+      - equal:
+          path: metadata.annotations
+          value:
+            argocd.argoproj.io/sync-wave: "-2"
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: odf-node-label-sa
+      - equal:
+          path: spec.template.spec.restartPolicy
+          value: Never
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+
+  - it: Should wait on the worker pool with the default timeout
+    asserts:
+      - matchRegex:
+          path: spec.template.spec.containers[0].command[2]
+          pattern: oc wait machineconfigpool/worker --for=condition=Updated --timeout=2700s
+      - matchRegex:
+          path: spec.template.spec.containers[0].command[2]
+          pattern: set -euo pipefail
+
+  - it: Should be cancelable without being marked successful
+    asserts:
+      # SIGTERM trap exits 143 (nonzero) so the Job never completes on cancel
+      - matchRegex:
+          path: spec.template.spec.containers[0].command[2]
+          pattern: trap '.*exit 143' TERM
+      - equal:
+          path: spec.template.spec.terminationGracePeriodSeconds
+          value: 60
+      # Drain evictions are ignored, not counted as failures
+      - equal:
+          path: spec.podFailurePolicy.rules[0].action
+          value: Ignore
+      - equal:
+          path: spec.podFailurePolicy.rules[0].onExitCodes.operator
+          value: In
+      - equal:
+          path: spec.podFailurePolicy.rules[0].onExitCodes.values
+          value: [143]
+      - equal:
+          path: spec.podFailurePolicy.rules[1].action
+          value: Ignore
+      - equal:
+          path: spec.podFailurePolicy.rules[1].onPodConditions[0].type
+          value: DisruptionTarget
+
+
+  - it: Should support custom pools and timeout
+    set:
+      waitForMcp:
+        pools:
+          - worker
+          - infra
+        timeout: 600
+    asserts:
+      - matchRegex:
+          path: spec.template.spec.containers[0].command[2]
+          pattern: oc wait machineconfigpool/worker --for=condition=Updated --timeout=600s
+      - matchRegex:
+          path: spec.template.spec.containers[0].command[2]
+          pattern: oc wait machineconfigpool/infra --for=condition=Updated --timeout=600s
+
+  - it: Should not render the Job when disabled
+    set:
+      waitForMcp:
+        enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0

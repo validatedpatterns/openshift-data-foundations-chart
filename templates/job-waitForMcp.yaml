@@ -1,0 +1,26 @@
+{{- if .Values.waitForMcp.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
+  name: job-wait-for-mcp
+  namespace: {{ .Values.odf.namespace }}
+spec:
+  # A drain-evicted (cancelled) pod is ignored rather than counted as a
+  # failure: the Job stays incomplete and a replacement pod resumes the
+  # wait. Only genuine failures count toward backoffLimit.
+  podFailurePolicy:
+    rules:
+      - action: Ignore
+        onExitCodes:
+          containerName: wait-for-mcp
+          operator: In
+          values: [143]
+      - action: Ignore
+        onPodConditions:
+          - type: DisruptionTarget
+  template:
+    spec:
+      {{- include "odf.waitForMcp.podSpec" . | nindent 6 }}
+{{- end }}
