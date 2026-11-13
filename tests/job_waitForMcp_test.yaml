@@ -51,13 +51,16 @@ tests:
           path: spec.podFailurePolicy.rules[0].action
           value: Ignore
       - equal:
+          path: spec.podFailurePolicy.rules[0].onExitCodes.operator
+          value: In
+      - equal:
           path: spec.podFailurePolicy.rules[0].onExitCodes.values
           value: [143]
       - equal:
           path: spec.podFailurePolicy.rules[1].action
           value: Ignore
       - equal:
-          path: spec.podFailurePolicy.rules[1].onDisruptionConditions[0].type
+          path: spec.podFailurePolicy.rules[1].onPodConditions[0].type
           value: DisruptionTarget
 
 
