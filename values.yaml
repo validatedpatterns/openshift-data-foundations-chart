@@ -109,6 +109,18 @@ rbac:
         - "list"
         - "patch"
         - "update"
+    - name: wait-for-mcp
+      createRole: true
+      apiGroups:
+        - machineconfiguration.openshift.io
+      scope:
+        cluster: true
+      resources:
+        - machineconfigpools
+      verbs:
+        - "get"
+        - "list"
+        - "watch"
   roleBindings:
     - name: label-storage-nodes
       createBinding: true
@@ -123,6 +135,31 @@ rbac:
       roleRef:
         kind: ClusterRole
         name: label-storage-nodes
+    - name: wait-for-mcp
+      createBinding: true
+      scope:
+        cluster: true
+        namespace: ""
+      subjects:
+        kind: ServiceAccount
+        name: odf-node-label-sa
+        namespace: openshift-storage
+        apiGroup: ""
+      roleRef:
+        kind: ClusterRole
+        name: wait-for-mcp
+
+# -- Wait for MachineConfigPools to finish reconciling (Updated=True,
+# Degraded=False) before the StorageCluster is created. Labeling nodes for
+# ODF can trigger an MCO rolling reboot; forming Ceph monitors mid-rollout
+# can strand monitor PVCs in the wrong availability zone.
+waitForMcp:
+  enabled: true
+  # -- MachineConfigPools to wait on before creating the StorageCluster.
+  pools:
+    - worker
+  # -- Per-pool wait timeout in seconds (45m covers a 3-node rolling reboot).
+  timeout: 2700
 
 job:
   image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
