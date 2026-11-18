@@ -14,17 +14,7 @@ spec:
     spec:
       # A drain-evicted (cancelled) pod is ignored rather than counted as a
       # failure; only genuine failures count toward backoffLimit.
-      podFailurePolicy:
-        rules:
-          - action: Ignore
-            onExitCodes:
-              containerName: label-storage-nodes
-              operator: In
-              values: [143]
-          - action: Ignore
-            onPodConditions:
-              - type: DisruptionTarget
-                status: "True"
+      {{- include "odf.labelStorageNodes.podFailurePolicy" . | nindent 6 }}
       template:
         spec:
           {{- include "odf.labelStorageNodes.podSpec" . | nindent 10 }}

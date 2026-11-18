@@ -26,6 +26,23 @@ standard-csi
 {{- end -}}
 
 {{/*
+Pod failure policy shared by the label-storage-nodes Job and CronJob.
+*/}}
+{{- define "odf.labelStorageNodes.podFailurePolicy" -}}
+podFailurePolicy:
+  rules:
+    - action: Ignore
+      onExitCodes:
+        containerName: label-storage-nodes
+        operator: In
+        values: [143]
+    - action: Ignore
+      onPodConditions:
+        - type: DisruptionTarget
+          status: "True"
+{{- end }}
+
+{{/*
 Bash script used by the label-storage-nodes Job and CronJob.
 Respects storageSystem.inventory.useSpecificNodes vs nodeJobLabelSelector.
 */}}
