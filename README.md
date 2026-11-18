@@ -1,10 +1,14 @@
 # openshift-data-foundations
 
-![Version: 0.3.4](https://img.shields.io/badge/Version-0.3.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.3.5](https://img.shields.io/badge/Version-0.3.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart to install ODF on Openshift
 
 ### Notable changes
+
+* v0.3.5: Add a `status: true` to podFailure specifications for <= 4.20
+          compatibility. The field is mandatory in <= 4.20, and still
+          accepted in later versions.
 
 * v0.3.4: Add a `job-wait-for-mcp` Job (sync-wave -2, before the node-labeling
           Job at -1 and the StorageCluster) that waits for the configured

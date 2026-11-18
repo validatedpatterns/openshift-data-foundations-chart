@@ -19,6 +19,7 @@ spec:
       - action: Ignore
         onPodConditions:
           - type: DisruptionTarget
+            status: "True"
   template:
     spec:
       {{- include "odf.labelStorageNodes.podSpec" . | nindent 6 }}
