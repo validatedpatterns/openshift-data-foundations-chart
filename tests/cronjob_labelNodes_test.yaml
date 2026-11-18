@@ -18,6 +18,12 @@ tests:
           path: spec.concurrencyPolicy
           value: Forbid
       - equal:
+          path: spec.jobTemplate.spec.podFailurePolicy.rules[1].onPodConditions[0].type
+          value: DisruptionTarget
+      - equal:
+          path: spec.jobTemplate.spec.podFailurePolicy.rules[1].onPodConditions[0].status
+          value: "True"
+      - equal:
           path: spec.jobTemplate.spec.template.spec.serviceAccountName
           value: odf-node-label-sa
 

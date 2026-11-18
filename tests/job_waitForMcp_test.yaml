@@ -62,6 +62,9 @@ tests:
       - equal:
           path: spec.podFailurePolicy.rules[1].onPodConditions[0].type
           value: DisruptionTarget
+      - equal:
+          path: spec.podFailurePolicy.rules[1].onPodConditions[0].status
+          value: "True"
 
 
   - it: Should support custom pools and timeout

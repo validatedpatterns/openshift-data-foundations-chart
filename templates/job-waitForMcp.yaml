@@ -20,6 +20,7 @@ spec:
       - action: Ignore
         onPodConditions:
           - type: DisruptionTarget
+            status: "True"
   template:
     spec:
       {{- include "odf.waitForMcp.podSpec" . | nindent 6 }}

@@ -7,6 +7,10 @@
 
 ### Notable changes
 
+* v0.3.5: Add a `status: true` to podFailure specifications for <= 4.20
+          compatibility. The field is mandatory in <= 4.20, and still
+          accepted in later versions.
+
 * v0.3.4: Add a `job-wait-for-mcp` Job (sync-wave -2, before the node-labeling
           Job at -1 and the StorageCluster) that waits for the configured
           MachineConfigPools (default: `worker`) to finish reconciling before
